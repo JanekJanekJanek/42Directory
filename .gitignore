@@ -1,0 +1,14 @@
+# Local Python environment
+.venv/
+venv/
+env/
+
+# Python-generated files
+__pycache__/
+*.py[cod]
+
+# Local editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
