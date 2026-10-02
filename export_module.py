@@ -20,7 +20,7 @@ def export_module(module_name: str, include_main: bool = False) -> Path:
 
     output_dir = root / "exports"
     output_dir.mkdir(exist_ok=True)
-    output_path = output_dir / f"{module_name}.md"
+    output_path = output_dir / f"my_{module_name.capitalize()}.md"
 
     with output_path.open("w", encoding="utf-8", newline="\n") as output:
         output.write(f"# {module_name} exercises\n\n")
