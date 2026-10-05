@@ -6,8 +6,9 @@ class Plant:
         self.age_days = age_days
         self.growth_rate = growth_rate
 
-    def show(self) -> None:
-        print("COPY FROM PREVIOUS")
+    def show(self):
+        print(f"{self.name}: {round(self.height, 1)}cm,",
+              f"{self.age_days} days old")
 
     def grow(self) -> None:
         self.height += self.growth_rate
@@ -19,10 +20,9 @@ class Plant:
 if __name__ == "__main__":
     rose = Plant("Rose", 25, 30, 0.8)
     print("=== Garden Plant Growth ===")
-    print(f"{rose.name}: {round(rose.height, 1)}cm, {rose.age_days} days old")
+    rose.show()
     for day in range(1, 8):
         print(f"=== Day {day} ===")
         rose.grow()
         rose.age()
-        print(f"{rose.name}: {round(rose.height, 1)}cm, {rose.age_days}",
-              "days old")
+        rose.show()
