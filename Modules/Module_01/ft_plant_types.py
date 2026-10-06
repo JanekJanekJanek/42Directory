@@ -17,11 +17,10 @@ class Plant:
         else:
             print("Growth rate can't be negative! (default value set)")
             self._growth_rate = 4.2
-        print("Plant created: ", end="")
-        self.show()
+
 
     def show(self) -> None:
-        print(f"Current state: {self.name}: {round(self._s_height, 1)}cm",
+        print(f"{self.name}: {round(self._s_height, 1)}cm,",
               f"{self._s_age}", "days old")
 
     def grow(self) -> None:
@@ -54,23 +53,38 @@ class Plant:
 
 
 class Flower(Plant):
-    pass
+    def __init__(self, name: str, s_height: float, s_age: int,
+                 growth_rate: float, color: str):
+        super().__init__(name, s_height, s_age, growth_rate)
+        self._color = color
+        self._has_bloomed = False
+
+    def bloom(self):
+        if self._has_bloomed == False:
+            print(f"[asking the {rose.name} to bloom...]")
+        self._has_bloomed = True
+
+    def show(self):
+        super().show()
+        print(f"Color: {self._color}")
+        if self._has_bloomed == True:
+            print(f"{self.name} is blooming beautifully!")
+        else:
+            print(f"{self.name} hasn't bloomed yet")
+
 
 class Tree(Plant):
     pass
+
 
 class Vegetable(Plant):
     pass
 
 
 if __name__ == "__main__":
-    print("=== Garden Security System ===")
-    rose = Plant("Rose", 15, 10, 1.2)
-    print("")
-    rose.set_height(25)
-    rose.set_age(30)
-    print("")
-    rose.set_height(-42)
-    rose.set_age(-42)
-    print("")
+    print("=== Garden Plan Types ===\n===Flower")
+    rose = Flower("Rose", 15, 10, 1.2, "Red")
     rose.show()
+    rose.bloom()
+    rose.show()
+    print("\n=== Tree")
