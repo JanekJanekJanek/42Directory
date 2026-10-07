@@ -58,7 +58,6 @@ class Plant:
             return False
 
 
-
 class Flower(Plant):
     def __init__(self, name: str, s_height: float, s_age: int,
                  growth_rate: float, color: str):
@@ -125,7 +124,7 @@ class Vegetable(Plant):
 
 if __name__ == "__main__":
     print("=== Garden statistics ===\n=== Check year-old")
-    print("Is 30 days more than a year? ->"
-          ,f"{Plant.is_year_or_more(30)}")
-    print("Is 400 days more than a year? ->"
-          ,f"{Plant.is_year_or_more(400)}")
+    print("Is 30 days more than a year? ->",
+          f"{Plant.is_year_or_more(30)}")
+    print("Is 400 days more than a year? ->",
+          f"{Plant.is_year_or_more(400)}")
