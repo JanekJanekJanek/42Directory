@@ -1,32 +1,49 @@
 class Plant:
-    def __init__(self, name: str, s_height: float, s_age: int,
-                 growth_rate: float) -> None:
+    class Stats:
+        def __init__(self, name):
+            self._name = name
+            self._grow_calls = 0
+            self._age_calls = 0
+            self._show_calls = 0
+
+        def calls_counter(self, grow_calls, age_calls, show_calls):
+            self._grow_calls += grow_calls
+            self._age_calls += age_calls
+            self._show_calls += show_calls
+        def show_stats(self):
+            print(f"[statistcs for {self._name}]")
+            print(f"Stats: {self._grow_calls} grow, {self._age_calls}",
+                  f"age, {self._show_calls} show")
+
+    def __init__(self, name: str, s_height: float = 42.42, s_age: int = 42,
+                 growth_rate: float = 4.2) -> None:
         self.name = name
-        if s_height > 0:
+        if s_height >= 0:
             self._s_height = s_height
         else:
             print("Height can't be negative! (default value set)")
-            self._s_height = 42.42
-        if s_age > 0:
+        if s_age >= 0:
             self._s_age = s_age
         else:
             print("Age can't be negative! (default value set)")
-            self._s_age = 42
-        if growth_rate > 0:
+        if growth_rate >= 0:
             self._growth_rate = growth_rate
         else:
             print("Growth rate can't be negative! (default value set)")
-            self._growth_rate = 4.2
+        self.stats = self.Stats(self.name)
 
     def show(self) -> None:
         print(f"{self.name}: {round(self._s_height, 1)}cm,",
               f"{self._s_age}", "days old")
+        self.stats.calls_counter(0, 0, 1)
 
     def grow(self) -> None:
         self._s_height += self._growth_rate
+        self.stats.calls_counter(1, 0, 0)
 
     def age(self) -> None:
         self._s_age += 1
+        self.stats.calls_counter(0, 1, 0)
 
     def set_height(self, height: int):
         if height > 0:
@@ -57,6 +74,9 @@ class Plant:
         else:
             return False
 
+    @classmethod
+    def anonymus(cls):
+        return cls("Unknow plant", 0, 0, 0)
 
 class Flower(Plant):
     def __init__(self, name: str, s_height: float, s_age: int,
@@ -66,8 +86,6 @@ class Flower(Plant):
         self._has_bloomed = False
 
     def bloom(self):
-        if self._has_bloomed is False:
-            print(f"[asking the {self.name} to bloom...]")
         self._has_bloomed = True
 
     def show(self):
@@ -121,6 +139,19 @@ class Vegetable(Plant):
         super().age()
         self._nutritional_value += 0.5
 
+class Seed(Flower):
+    def __init__(self, name, s_height, s_age, growth_rate, color):
+        super().__init__(name, s_height, s_age, growth_rate, color)
+        self._seeds_num = 0
+
+    def bloom(self):
+        super().bloom()
+        self._seeds_num = 42
+
+    def show(self):
+        super().show()
+        print(f"Seeds: {self._seeds_num}")
+
 
 if __name__ == "__main__":
     print("=== Garden statistics ===\n=== Check year-old")
@@ -128,3 +159,34 @@ if __name__ == "__main__":
           f"{Plant.is_year_or_more(30)}")
     print("Is 400 days more than a year? ->",
           f"{Plant.is_year_or_more(400)}")
+    print("\n=== Seed")
+    sunfl = Seed("Sunflower", 80, 45, 1.5, "yellow")
+    sunfl.show()
+    print("[make sunflower grow, age and bloom]")
+    for day in range(20):
+        sunfl.age()
+        sunfl.grow()
+    sunfl.bloom()
+    sunfl.show()
+    sunfl.stats.show_stats()
+    print("\n=== Anonymous")
+    anon = Plant.anonymus()
+    anon.show()
+
+# === Seed
+# Sunflower: 80.0cm, 45 days old
+# Color: yellow
+# Sunflower has not bloomed yet
+# Seeds: 0
+# [make sunflower grow, age and bloom]
+# Sunflower: 110.0cm, 65 days old
+# Color: yellow
+# Sunflower is blooming beautifully!
+# Seeds: 42
+# [statistics for Sunflower]
+# Stats: 1 grow, 1 age, 2 show
+
+# === Anonymous
+# Unknown plant: 0.0cm, 0 days old
+# [statistics for Unknown plant]
+# Stats: 0 grow, 0 age, 1 show
