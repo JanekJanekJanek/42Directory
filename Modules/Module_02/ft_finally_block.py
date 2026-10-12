@@ -13,18 +13,18 @@ class PlantError(GardenError):
         super().__init__(self._message)
 
 
-def water_plant(plant_name: list[str]) -> None:
-    for plant in plant_name:
-        if plant == plant.capitalize():
-            print(f"Watering {plant}: [OK]")
-        else:
-            raise PlantError(f"Invalid plant name to water: {plant}")
+def water_plant(plant_name: str) -> None:
+    if plant_name == plant_name.capitalize():
+        print(f"Watering {plant_name}: [OK]")
+    else:
+        raise PlantError(f"Invalid plant name to water: '{plant_name}'")
 
 
-def test_watering_system(plant_name: list[str]) -> None:
+def test_watering_system(plant_names: list[str]) -> None:
     print("Opening watering system")
     try:
-        water_plant(plant_name)
+        for plant in plant_names:
+            water_plant(plant)
     except Exception as error:
         print(f"{error}")
         print(".. ending tests and returning to main")
