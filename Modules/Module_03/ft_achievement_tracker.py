@@ -34,7 +34,7 @@ def main() -> None:
     distinict_achivements = achivs[0] | achivs[1] | achivs[2] | achivs[3]
     print(f"\nAll distinct achivements: {distinict_achivements}")
     common_achivements = achivs[0] & achivs[1] & achivs[2] & achivs[3]
-    print(f"\nCommon achivements: {common_achivements}")
+    print(f"\nCommon achivements: {common_achivements}\n")
     i = 0
     for player in players:
         others:  set[str] = set()
@@ -44,6 +44,7 @@ def main() -> None:
         unique = achivs[i].difference(others)
         print(f"Only {player} has: {unique}")
         i += 1
+    print()
     i = 0
     for player in players:
         missing = distinict_achivements.difference(achivs[i])
