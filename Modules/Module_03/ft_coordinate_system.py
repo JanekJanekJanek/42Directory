@@ -4,7 +4,7 @@ import math
 def get_player_pos() -> tuple[float, float, float]:
     while True:
         try:
-            args = input("Enter new coordinates as floats in format"
+            args = input("📍Enter new coordinates as floats in format"
                          " 'x,y,z': ").split(",")
             i = 0
             for arg in args:
