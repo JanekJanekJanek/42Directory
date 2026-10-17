@@ -23,8 +23,11 @@ def main() -> None:
                 if pair[0] in inventory.keys():
                     raise RedundantError(f"🚫 Redundant item '{pair[0]}'"
                                          " - discarding")
-                else:
+                elif int(pair[1]) > 0:
                     inventory.update({pair[0]: int(pair[1])})
+                else:
+                    raise InventoryError(f"🚫 Error - invalid quantity"
+                                         f" '{pair[1]}'")
             else:
                 raise InventoryError(f"🚫 Error - invalid parameter '{arg}'")
         except InventoryError as e:
