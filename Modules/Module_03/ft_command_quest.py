@@ -7,8 +7,9 @@ def main() -> None:
     length = len(sys.argv)
     if length < 2:
         print("No arguments provided!")
+    else:
+        print(f"Arguments received: {length - 1}")
     i = 1
-    print(f"Arguments received: {length - 1}")
     for arg in sys.argv[1:]:
         print(f"Argument {i}: {arg}")
         i += 1

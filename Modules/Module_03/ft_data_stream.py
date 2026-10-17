@@ -5,8 +5,8 @@ import typing
 def gen_event() -> typing.Generator[tuple[str, str], None, None]:
     players = ["Bob", "Dylan", "Alice", "Charlie"]
     actions = ["eat", "code", "sleep", "debug"]
-    event = (random.choice(players), random.choice(actions))
-    yield event
+    while True:
+        yield(random.choice(players), random.choice(actions))
 
 
 def consume_event(events: list[tuple[str, str]]) -> \
@@ -18,9 +18,10 @@ def consume_event(events: list[tuple[str, str]]) -> \
 
 
 def main() -> None:
+    random_events = gen_event()
     for i in range(1, 1000 + 1):
-        event = next(gen_event())
-        print(f"Event {i}: Player {event[0]} did action {event[1]}")
+        player, action = next(random_events)
+        print(f"Event {i}: Player {player} did action {action}")
     actions_log = []
     for i in range(10):
         actions_log.append((next(gen_event())))

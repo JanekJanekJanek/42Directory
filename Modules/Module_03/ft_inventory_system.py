@@ -30,9 +30,9 @@ def main() -> None:
                                          f" '{pair[1]}'")
             else:
                 raise InventoryError(f"🚫 Error - invalid parameter '{arg}'")
-        except InventoryError as e:
-            print(f"{e}")
         except RedundantError as e:
+            print(f"{e}")
+        except InventoryError as e:
             print(f"{e}")
         except ValueError as e:
             print(f"🚫 Quantity error for '{pair[0]}': {e}")
