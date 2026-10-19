@@ -36,13 +36,12 @@ def write_file(content: str) -> None:
         print("Transform data:\n---\n")
         print(f"{string}")
         print("\n---")
-        print("Enter new file name (or leave empty to skip): ", end="")
     except TypeError:
         return
     try:
-
-        new_file = sys.stdin.readline()
-        if new_file != "\n":
+        print("Enter new file name (or leave empty to skip): ", end="", flush=True)
+        new_file = sys.stdin.readline().strip()
+        if new_file != "":
             print(f"Saving data to '{new_file}'")
             io = open(new_file, "w")
             io.write(string)
