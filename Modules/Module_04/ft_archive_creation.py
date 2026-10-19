@@ -28,7 +28,7 @@ def write_file(content: str) -> None:
     try:
         for char in content:
             if char == "\n":
-                string += "#" + char
+                string += "#\n"
                 continue
             else:
                 string += char
@@ -37,9 +37,9 @@ def write_file(content: str) -> None:
         print("\n---")
     except TypeError:
         return
+    new_file = "test"
     try:
-        print("Enter new file name (or leave empty to skip): ", end="")
-        new_file = sys.stdin()
+        new_file = input("Enter new file name (or leave empty to skip): ")
         if new_file != "":
             print(f"Saving data to '{new_file}'")
             io = open(new_file, "w")
@@ -55,13 +55,9 @@ def write_file(content: str) -> None:
 
 
 def main() -> None:
-    try:
-        content = read_file()
-        if content is not None:
-            write_file(content)
-    except (FileNotFoundError, IsADirectoryError,
-            PermissionError, NotADirectoryError):
-        pass
+    content = read_file()
+    if content is not None:
+        write_file(content)
 
 
 if __name__ == "__main__":

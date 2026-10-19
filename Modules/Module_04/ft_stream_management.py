@@ -36,18 +36,20 @@ def write_file(content: str) -> None:
         print("Transform data:\n---\n")
         print(f"{string}")
         print("\n---")
+        print("Enter new file name (or leave empty to skip): ", end="")
     except TypeError:
         return
     try:
-        new_file = input("Enter new file name (or leave empty to skip): ")
-        if new_file != "":
+
+        new_file = sys.stdin.readline()
+        if new_file != "\n":
             print(f"Saving data to '{new_file}'")
             io = open(new_file, "w")
             io.write(string)
             print(f"Data saved in file '{new_file}'")
             io.close()
         else:
-            print("Saving to file skipped")
+            print("\nSaving to file skipped")
     except (TypeError, IsADirectoryError,
             PermissionError, NotADirectoryError) as e:
         print(f"{sys.stderr.name} Error writing to file '{new_file}': {e}",
@@ -68,3 +70,4 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 # /home/jziental/git_General_Repo/Modules/Module_04/Data_Vault_7
+# python3 Module_04/ft_stream_management.py /etc/shadow 1>stdout 2>stderr

@@ -11,11 +11,10 @@ def main() -> None:
             print(f"{io.read()}")
             print("---")
             print(f"File '{file}' closed.")
+            io.close()
         except (FileNotFoundError, IsADirectoryError,
                 PermissionError, NotADirectoryError) as e:
             print(f"Error opening file '{file}': {e}")
-        finally:
-            io.close()
     else:
         print("Usage: ft_ancient_text.py <file>")
 
