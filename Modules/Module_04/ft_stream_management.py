@@ -1,4 +1,5 @@
 import sys
+import typing
 
 
 def read_file() -> str | None:
@@ -38,8 +39,10 @@ def write_file(content: str) -> None:
         print("\n---")
     except TypeError:
         return
+    io: typing.TextIO | None = None
     try:
-        print("Enter new file name (or leave empty to skip): ", end="", flush=True)
+        print("Enter new file name (or leave empty to skip): ", end="",
+              flush=True)
         new_file = sys.stdin.readline().strip()
         if new_file != "":
             print(f"Saving data to '{new_file}'")
@@ -48,12 +51,15 @@ def write_file(content: str) -> None:
             print(f"Data saved in file '{new_file}'")
             io.close()
         else:
-            print("\nSaving to file skipped")
+            print("Saving to file skipped")
     except (TypeError, IsADirectoryError,
             PermissionError, NotADirectoryError) as e:
         print(f"{sys.stderr.name} Error writing to file '{new_file}': {e}",
               file=sys.stderr)
         print("Data not saved")
+    finally:
+        if io is not None:
+            io.close()
 
 
 def main() -> None:

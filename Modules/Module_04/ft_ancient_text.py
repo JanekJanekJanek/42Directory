@@ -5,9 +5,9 @@ def main() -> None:
     if len(sys.argv) == 2:
         file = sys.argv[1]
         try:
-            print(f"Accesing file '{file}'")
+            print("=== Cyber Archives Recovery ===")
             io = open(file, "r")
-            print("=== Cyber Archives Recovery ===\n---\n")
+            print(f"Accesing file '{file}'\n---\n")
             print(f"{io.read()}")
             print("---")
             print(f"File '{file}' closed.")
