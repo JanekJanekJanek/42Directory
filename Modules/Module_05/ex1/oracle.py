@@ -1,39 +1,64 @@
-import os
 import dotenv
+import os
 
 
-def load_envs(file_path: str, envs: dict[str, str]) -> dict[str, str]:
-    for env in envs:
+def load_configs(envs: dict[str, str | None]) -> dict[str, str | None]:
+    configs: dict[str, str | None] = {"MATRIX_MODE": None,
+                                      "DATABASE_URL": None,
+                                      "API_KEY": None, "LOG_LEVEL": None,
+                                      "ZION_ENDPOINT": None}
+    for env in configs:
         try:
             value = envs[env]
+            if value is None:
+                raise KeyError
         except KeyError:
-            envs[env] = None
+            configs[env] = None
+            print(f"Missing config: {env}")
             continue
-        envs[env] = value
-    return(dict(envs))
+        configs[env] = value
+    return (configs)
 
 
-def show_envs(envs: dict[str, str]) -> bool:
-    print("Configuration loaded:")
+def show_envs(envs: dict[str, str | None]) -> bool:
+    print("Configurations loaded:")
+    is_missing = False
     try:
-        if envs['MATRIX_MODE'] is not None:
+        if envs['MATRIX_MODE'] not in [None, ""]:
             print(f"Mode: {envs['MATRIX_MODE']}")
-        if envs['DATABASE_URL'] is not None:
-            print(f"Database: Connected to local instance")
-        if envs['API_KEY'] is not None:
-            print(f"API Access: Authenticated")
-        if envs['LOG_LEVEL'] is not None:
+        else:
+            print("Mode: setting missing")
+            is_missing = True
+        if envs['DATABASE_URL'] not in [None, ""]:
+            print("Database: Connected to local instance")
+        else:
+            print("Database: setting missing")
+            is_missing = True
+        if envs['API_KEY'] not in [None, ""]:
+            print("API Access: Authenticated")
+        else:
+            print("API Access: setting missing")
+            is_missing = True
+        if envs['LOG_LEVEL'] not in [None, ""]:
             print(f"Log Level: {envs['LOG_LEVEL']}")
-        if envs['ZION_ENDPOINT'] is not None:
-            print(f"Remote Network: Online\n")
+        else:
+            print("Log Level: setting missing")
+            is_missing = True
+        if envs['ZION_ENDPOINT'] not in [None, ""]:
+            print("Remote Network: Online")
+        else:
+            print("Remote Network: setting missing")
+            is_missing = True
     except KeyError as e:
         print(f"{e}: Configuration setting missing")
+        is_missing = True
+    return is_missing
 
 
-def check_envs(envs: dict[str, str]) -> bool:
-    print("\nConfiguration security check:\n")
-    is_missing = False
-    configs = ["MATRIX_MODE", "DATABASE_URL", "API_KEY", "LOG_LEVEL", "ZION_ENDPOINT"]
+def missing_envs(envs: dict[str, str | None], is_missing: bool) -> None:
+    print("\nConfiguration security check:")
+    configs = ["MATRIX_MODE", "DATABASE_URL", "API_KEY",
+               "LOG_LEVEL", "ZION_ENDPOINT"]
     for env in configs:
         try:
             if envs[env] is None:
@@ -42,37 +67,46 @@ def check_envs(envs: dict[str, str]) -> bool:
         except KeyError:
             is_missing = True
             break
-    if is_missing == False:
-        print("\nConfiguration security check:\n")
+    if is_missing is False:
         print("[OK] No hardcoded secrets detected")
         print("[OK] .env file properly ignored by git")
         print("[OK] Production overrides available")
-        print("The Oracle sees all configurations.")
-    elif is_missing == True:
-        print("The Oracle doesn't see all configurations.")
+        print("\nThe Oracle sees all configurations.")
+    elif is_missing is True:
+        print("\nThe Oracle doesn't see all configurations.")
 
 
-def main():
-    print("\nORACLE STATUS: Consulting the configuration...\n")
+def run_with_configs(envs: dict[str, str], is_missing: bool) -> None:
+    if is_missing is True:
+        print("Set all settings and rerun!")
+        return None
+    if envs["MATRIX_MODE"] == "production":
+        print("Welcone to the Matrix!")
+    elif envs["MATRIX_MODE"] == "development":
+        print("Program is running in debug mode")
+    else:
+        print("\nMode not set! Chose “development” or “production” and rerun")
+
+
+def main() -> None:
     print("=== Correct config===")
-    file_path = ".env.example"
-    dotenv.load_dotenv(file_path)
-    envs = dotenv.dotenv_values(file_path)
-    correct = load_envs(file_path, envs)
-    show_envs(correct)
-    check_envs(correct)
-    print("\n=== Incorrect config===\n")
+    print("\nORACLE STATUS: Consulting the configuration...\n")
     file_path = ".env"
-    envs = {"MATRIX_MODE": "production", "DATABASE_URL": "postgre//:db",
+    dotenv.load_dotenv(file_path, verbose=True)
+    correct = load_configs(dict(os.environ))
+    is_missing = show_envs(correct)
+    missing_envs(correct, is_missing)
+    run_with_configs(dict(os.environ), is_missing)
+
+    print("\n=== Incorrect config===\n")
+    envs = {"MATRIX_MODE": "production", "DATABASE_URL": None,
             "API_KEY": "okon", "LOG_LEVEL": "super high"}
-    incorrect = load_envs(file_path, envs)
-    show_envs(incorrect)
-    check_envs(incorrect)
-#Configuration security check:
-#[OK] No hardcoded secrets detected
-#[OK] .env file properly ignored by git
-#[OK] Production overrides available
-#The Oracle sees all configurations.
+    dotenv.load_dotenv(file_path, verbose=True)
+    incorrect = load_configs(envs)
+    is_missing = show_envs(incorrect)
+    missing_envs(incorrect, is_missing)
+    run_with_configs(dict(os.environ), is_missing)
+
+
 if __name__ == "__main__":
     main()
-
